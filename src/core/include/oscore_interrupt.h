@@ -53,12 +53,12 @@ namespace oscore
       static int32              disable();     //Describe in ASM file
       static void               enable(int32); //Describe in ASM file
 
-	  template <typename Type> 
-	  static Type enableReturn(int32 is, Type ret)
-	  {
+      template <typename Type> 
+      static Type enableReturn(int32 is, Type ret)
+      {
         enable(is);
         return ret;
-	  }
+      }
 
     private:
 
