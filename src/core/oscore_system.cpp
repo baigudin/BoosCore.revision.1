@@ -6,12 +6,12 @@
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
  */
-#include "rts.h" 
-#include "oscore_config.h"
+#include "rts.h"
 #include "oscore_interrupt.h"
 #include "oscore_timer.h"
 #include "oscore_thread.h"
 #include "oscore_system.h"
+#include "oscore_config.h"
 
 int32 errno = 0;
 
@@ -19,7 +19,6 @@ namespace oscore
 {
   System::Time       System::time_ = {0, 0, 0, 0};      
   System::HwResource System::res_ = {NULL};  
-  uint32             System::tos_ = SYS_STACK;
 
   /**
    * Initialization and start system
@@ -46,6 +45,19 @@ namespace oscore
   }
   
   /**
+   * Terminate running system
+   *
+   * This method never returns normally.
+   *
+   * @param int32 status   
+   * @return void
+   */  
+  void System::exit(int32 status)
+  {
+    Thread::terminate();
+  }  
+  
+  /**
    * Initialization and start system
    *
    * @return bool
@@ -59,7 +71,7 @@ namespace oscore
     if(System::init() == false) return;
     if(Thread::init() == false) return;
     //System start:
-    Thread::begin();    
+    Thread::initiate();    
     //Deinitialize:
     Thread::deinit();
     System::deinit();
@@ -78,7 +90,7 @@ namespace oscore
     uint32 stage = 0;
     memset(&res_, 0x0, sizeof(HwResource));            
     memset(&time_, 0x0, sizeof(Time));        
-    lowInitClasses();      
+    initClassesLow();
     while(true)
     {
       //Stage 1:

@@ -11,22 +11,22 @@
 ; ----------------------------------------------------------------------------
         .def            _c_int00
         .def            os_system_init
-        .def            _lowInitClasses__Q2_6oscore6SystemSFv
+        .def            _initClassesLow__Q2_6oscore6SystemSFv
 ; ----------------------------------------------------------------------------
         .ref            os_int_enable
         .ref            os_int_disable
-        .ref            _tos___Q2_6oscore6System
         .ref            _start__Q2_6oscore6SystemSFv
         .ref            ___cinit__
         .ref            ___pinit__
 ; ----------------------------------------------------------------------------
-        .asg            _lowInitClasses__Q2_6oscore6SystemSFv, _lowInitClasses
-        .asg            _start__Q2_6oscore6SystemSFv,          _start
-        .asg            _tos___Q2_6oscore6System,              _tos
+        .asg            _initClassesLow__Q2_6oscore6SystemSFv, m_init_classes
+        .asg            _start__Q2_6oscore6SystemSFv,          m_start
+        .asg            0x2000,                                c_stack_size
         .asg            b15, sp
 ; ----------------------------------------------------------------------------
+        .bss            m_stack, c_stack_size, 8
 
-        .sect           ".os_text"
+        .text
 ; ----------------------------------------------------------------------------
 ; Low level system initialization
 ;
@@ -72,16 +72,13 @@ os_system_init:
         .eval           i+1, i
         .endloop
         ; Setup OS core stack pointer
-        mvkl            _tos, b15
-        mvkh            _tos, b15
-        ldw             *b15, b15
-        nop             4
-        sub             b15, 8, b15
+        mvkl            m_stack + c_stack_size - 8, b15
+        mvkh            m_stack + c_stack_size - 8, b15
         ; Call hi level initialization
         mvkl            os_system_deinit, b3
-     || mvkl            _start, a3
+     || mvkl            m_start, a3
         mvkh            os_system_deinit, b3
-     || mvkh            _start, a3
+     || mvkh            m_start, a3
         b               a3
         nop             5
 
@@ -134,7 +131,7 @@ m_cinit_return?:
 ; return void
 ; ----------------------------------------------------------------------------
 os_system_init_pinit:
-_lowInitClasses:
+m_init_classes:
         mv              b3, b10     
         mvkl            ___pinit__, a10
      || mvkl            0xffffffff, b0

@@ -6,14 +6,14 @@
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
  */
- 
 #include "rts.h"
 #include "main.h"
-#include "oscore_config.h"
 #include "oscore_system.h"
-#include "oscore_interrupt.h"
-#include "oscore_timer.h"
+#include "oscore_timer_interrupt.h"
 #include "oscore_thread.h"
+#include "oscore_thread_handler.h"
+#include "oscore_config.h"
+#include "oscore_hardware.h"
 
 #ifdef OS_DEBUG
 #  define OS_THREAD_DEBUG
@@ -24,12 +24,10 @@ extern void* __bss__;
 namespace oscore
 {
   Thread*                Thread::main_ = NULL;
-  Thread::Register*      Thread::system_ = NULL;
-  Thread::HwResource     Thread::res_ = {NULL, NULL};
+  Register*              Thread::system_ = NULL;
+  Thread::InterruptData  Thread::interrupt_ = {NULL, NULL};
   Thread::ThreadList     Thread::thread_ = {NULL, NULL};
-  int32                  Thread::idCount_ = 0;  
   uint32                 Thread::registerShift_ = 0;  
-  void*                  Thread::shedulerStack_ = NULL;
   bool                   Thread::lockSwitch_ = false;
   
   /** 
@@ -76,7 +74,7 @@ namespace oscore
    */
   Thread::~Thread()
   {
-    destructor();
+    destruct();
   }
   
   /**
@@ -138,8 +136,8 @@ namespace oscore
     Thread* res = currentThread();
     res->wakeupTime_ = System::nanoTime() + millis * 1000000ull + nanos;
     res->setStatus(SLEEPING);
+    Thread::yield();        
     Interrupt::enable(is);
-    yield();
   }
   
   /**
@@ -154,6 +152,7 @@ namespace oscore
     res->block_ = block;
     res->setStatus(BLOCKED);
     Thread::yield();    
+    res->block_ = NULL;    
     Interrupt::enable(is);
   }  
 
@@ -180,16 +179,6 @@ namespace oscore
   }
   
   /**
-   * Returns the identifier of this Thread
-   *
-   * @return int32
-   */
-  int32 Thread::getId()
-  {
-    return id_;
-  }
-
-  /**
    * Get this thread priority.
    *
    * @return int32
@@ -197,6 +186,16 @@ namespace oscore
   int32 Thread::getPriority()
   {
     return priority_;
+  }
+
+  /**
+   * Yield next thread
+   *
+   * @return void
+   */  
+  void Thread::yield()
+  {
+    interrupt_.res->jump();
   }
   
   /**
@@ -244,23 +243,22 @@ namespace oscore
   bool Thread::init()
   {
     Thread thr;
-    uint32 stage = 0;
+    int32 stage = 0;
     registerShift_ = (uint32)&thr.register_ - (uint32)&thr;
     while(true)
     {
       //Stage 1:
       stage++;
-      res_.hwInt = new Interrupt(Interrupt::TIMER, (void(*)())0xffffffff);      
-      if(res_.hwInt == NULL) break;
-      if(res_.hwInt->getError() != OSE_OK) break;
-      res_.hwInt->unlock();
+      interrupt_.handle = new ThreadHandler();
+      if(interrupt_.handle == NULL) break;
       //Stage 2:
-      stage++;      
-      res_.hwTim = new Timer(Timer::TIM0);
-      if(res_.hwTim == NULL) break;  
-      if(res_.hwTim->getError() != OSE_OK) break;      
-      res_.hwTim->setPeriod(SYS_QUANT);
-      res_.hwTim->start();
+      stage++;
+      interrupt_.res = new TimerInterrupt(TimerInterrupt::TINT0, interrupt_.handle);      
+      if(interrupt_.res == NULL) break;
+      if(interrupt_.res->getError() != OSE_OK) break;
+      interrupt_.res->unlock();
+      interrupt_.res->getTimer()->setPeriod(SYS_QUANT);
+      interrupt_.res->getTimer()->start();
       //Stage 3:
       stage++;            
       main_ = new Thread("Main");
@@ -276,22 +274,16 @@ namespace oscore
       #ifdef OS_THREAD_DEBUG
       memset(system_, 0xff, sizeof(Register));
       #endif
-      //Stage 5:
-      stage++;
-      shedulerStack_ = new uint8[STACK_SIZE];
-      if(shedulerStack_ == NULL) break;
-      shedulerStack_ = (void*)((uint32)shedulerStack_ + STACK_SIZE - 8);
       //Stage complete:
       stage = 0;
       break;
     }
     switch(stage)
     {
-      case 5: delete[] shedulerStack_;
       case 4: delete system_;    
       case 3: delete main_;
-      case 2: delete res_.hwTim;
-      case 1: delete res_.hwInt;
+      case 2: delete interrupt_.res;
+      case 1: delete interrupt_.handle;
       default: return false;
       case 0: return true;
     }
@@ -304,16 +296,14 @@ namespace oscore
    */
   bool Thread::deinit()
   {
-    void* stack = (void*)((uint32)shedulerStack_ - STACK_SIZE + 8);  
-    delete[] stack;
     delete system_;    
     delete main_;
-    delete res_.hwTim;
-    delete res_.hwInt;
+    delete interrupt_.res;
+    delete interrupt_.handle;
     system_ = NULL;
     main_ = NULL;
-    res_.hwTim = NULL;
-    res_.hwInt = NULL;
+    interrupt_.res = NULL;
+    interrupt_.handle = NULL;
     memset(&thread_, 0x0, sizeof(ThreadList));
     return true;
   }  
@@ -325,8 +315,8 @@ namespace oscore
    */
   bool Thread::isInit()
   {
-    if(res_.hwInt == NULL) return false;
-    if(res_.hwTim == NULL) return false;    
+    if(interrupt_.handle == NULL) return false;
+    if(interrupt_.res == NULL) return false;    
     return true;
   }
 
@@ -369,6 +359,7 @@ namespace oscore
       if(lockSwitch_ == false) thread_.current = thread_.current->next_;
       if(thread_.current->getStatus() == RUNNABLE) break;
     }
+    thread_.current->setRegister();
     thread_.current->setStatus(RUNNING);    
     thread_.current->setQuant();    
   }
@@ -410,13 +401,38 @@ namespace oscore
       thr = thr->next_;
       if(thread_.tail == thr) break;
     }
-    if(alive != 0) Thread::yield();    
+    if(alive != 0) while(true) Thread::yield();    
+    interrupt_.res->lock();
+    interrupt_.res->getTimer()->setPeriod(0);
+    interrupt_.res->getTimer()->stopCount();    
     Interrupt::enable(is);
     //This PC poit is available only if all thread is dead:
-    thread_.current = NULL;
-    lowDisable();
+    terminate();
     while(true);
   }  
+  
+  /**
+   * Initiate thread execution
+   *
+   * @return void
+   */  
+  void Thread::initiate()
+  {
+    initiateLow();
+    //This PC point is allowable after call Thread::terminate method
+  }
+
+  /**
+   * Terminate thread execution
+   *
+   * @return void
+   */    
+   void Thread::terminate()
+   {
+     thread_.current = NULL;   
+     return terminateLow();
+     //This PC point is not allowable
+   }
   
   /**
    * Enable thread execution
@@ -429,14 +445,25 @@ namespace oscore
   bool Thread::running()
   {
     int32 is = Interrupt::disable();
-    if(thread_.tail == NULL) return Interrupt::enableReturn<bool>(is, false);
-    if(thread_.current != NULL) return Interrupt::enableReturn<bool>(is, false);
-    if(thread_.tail->getStatus() != RUNNABLE) return Interrupt::enableReturn<bool>(is, false);
+    if(thread_.tail == NULL){Interrupt::enable(is); return false;}
+    if(thread_.current != NULL){Interrupt::enable(is); return false;}
+    if(thread_.tail->getStatus() != RUNNABLE){Interrupt::enable(is); return false;}
     thread_.current = thread_.tail;    
+    thread_.current->setRegister();
     thread_.current->setStatus(RUNNING);      
     thread_.current->setQuant();
-    res_.hwInt->clear();    
+    interrupt_.res->clear();    
     return true;
+  }
+
+  /**
+   * Set interrupt content register
+   *
+   * @return void
+   */  
+  void Thread::setRegister()
+  {
+    Interrupt::setRegister(register_);    
   }
 
   /**
@@ -446,8 +473,8 @@ namespace oscore
    */  
   void Thread::setQuant()
   {
-    res_.hwTim->setCount(0);
-    res_.hwTim->setPeriod(priority_ * SYS_QUANT);
+    interrupt_.res->getTimer()->setCount(0);
+    interrupt_.res->getTimer()->setPeriod(priority_ * SYS_QUANT);
   }
  
   /**
@@ -559,11 +586,10 @@ namespace oscore
     target_ = target;
     priority_ = NORM_PRIORITY;
     name_ = name;
-    id_ = ++idCount_;    
     //Memory alloced:    
     register_ = new Register;
-    stack_ = new uint8[STACK_SIZE];
-    if( stack_ == NULL || register_ == NULL ) 
+    stack_ = new uint8[SYS_STACK_SIZE];
+    if(stack_ == NULL || register_ == NULL) 
     {
       delete[] stack_;
       delete register_;
@@ -578,7 +604,7 @@ namespace oscore
     register_->irp = (uint32)&runVector;
     register_->b3  = (uint32)&exitVector;
     register_->b14 = (uint32)&__bss__;
-    register_->b15 = (uint32)stack_ + STACK_SIZE - 8;
+    register_->b15 = (uint32)stack_ + SYS_STACK_SIZE - 8;
     setStatus(NEW);
   }
 
@@ -587,7 +613,7 @@ namespace oscore
    *
    * @return void
    */  
-  void Thread::destructor()
+  void Thread::destruct()
   {
     unlink();
     delete[] stack_;
@@ -609,7 +635,6 @@ namespace oscore
     block_ = NULL;
     stack_ = NULL;
     name_ = NULL;
-    id_ = 0;
     priority_ = 0;
     wakeupTime_ = 0;
     status_ = UNDEF;

@@ -27,6 +27,7 @@ namespace oscore
         OSE_CMD,
         OSE_MEM,
         OSE_HW,
+        OSE_ID,
         OSE_ALLOC,
         OSE_RES,
         OSE_BUSY,
@@ -36,8 +37,9 @@ namespace oscore
 
                                 Object();
       virtual                  ~Object();
+      virtual int32             getId();
+      virtual int32             getError();
       virtual const char*       getErrorString(int32);
-      int32                     getError();
       bool                      onHeap();
       void*                     operator new(uint32);
       void*                     operator new[](uint32);
@@ -45,10 +47,12 @@ namespace oscore
       void*                     operator new[](uint32,void*);
       void                      operator delete(void*);
       void                      operator delete[](void*);
+      void                      operator delete(void*, void*);
+      void                      operator delete[](void*, void*);
 
     protected:
 
-      int32                     setError(int32);
+      void                      setError(int32);
       static void*              memAlloc(uint32);
       static bool               memFree(void*);
       static void*              memAdd(void*, uint32);
@@ -57,12 +61,14 @@ namespace oscore
     private:
 
       ObjectMemory*             memory_;
-      int32                     errno_;
+      int32                     error_;
+      int32                     id_;
+      static int32              idCount_;
 
-                                Object(const Object&);     //Copy not allowed
-      void                      operator= (const Object&); //Assignment not allowed
       static bool               init();
       static bool               deinit();
+                                Object(const Object&);     //Copy not allowed
+      void                      operator= (const Object&); //Assignment not allowed
 
       friend class              System;
       friend struct             ObjectPage;

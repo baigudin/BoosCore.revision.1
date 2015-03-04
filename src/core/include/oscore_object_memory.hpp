@@ -63,6 +63,8 @@ namespace oscore
       static void dumpAllocated()
       {
         #ifdef OS_MEMORY_DEBUG
+        char str[64];
+        Object* obj;
         uint32 is = Interrupt::disable();
         std::cout << "-----------------\n";
         std::cout << "Allocated memory:\n";
@@ -72,12 +74,25 @@ namespace oscore
           ObjectMemory* mem = page->data();
           while(mem)
           {
-            std::cout 
-              << "Address: " << (uint32)mem << ((mem->attr_ & ATTR_USED) ? "U" : "F") <<"; " 
-              << "Id: " << mem->tid_ <<"; " 
-              << "Size: " << mem->size_ <<"; " 
-              << "iSize: " << mem->isize_ <<"; " 
-              << "\n";
+            std::cout << ((mem->attr_ & ATTR_USED) ? "USED" : "FREE") <<" ";            
+            sprintf(str, "0x%08X", (uint32)mem);
+            std::cout << "Addr: " << (const char*)str <<"; ";
+            sprintf(str, "0x%08X", mem->tid_);
+            std::cout << "TID: " << (const char*)str <<"; ";
+            sprintf(str, "0x%08X", mem->size_);
+            std::cout << "Size: " << (const char*)str <<"; "; 
+            sprintf(str, "0x%08X", mem->isize_);
+            std::cout << "iSize: " << (const char*)str <<"; "; 
+            if(mem->attr_ & ATTR_USED)
+            {
+              obj = mem->data();
+              if(obj->memory_ == mem)
+              {
+                sprintf(str, "0x%08X", obj->getId());
+                std::cout << "OID: " << (const char*)str <<"; "; 
+              }
+            }
+            std::cout << "\n";
             mem = mem->next_;
           }
           page = page->next_;

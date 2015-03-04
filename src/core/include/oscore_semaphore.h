@@ -9,7 +9,6 @@
 #ifndef OSCORE_SEMAPHORE_H_
 #define OSCORE_SEMAPHORE_H_
 
-#include "oscore_semaphore_list.hpp"
 #include "oscore_resource.h"
 
 namespace oscore
@@ -27,22 +26,27 @@ namespace oscore
       virtual                  ~Semaphore();
       virtual bool              isBlocked();
       void                      acquire();
-      void                      acquire(int32 permits);
+      void                      acquire(int32);
       void                      release();
-      void                      release(int32 permits);
+      void                      release(int32);
 
     private:
+
+      struct List
+      {
+        SemaphoreList*          exec;
+        SemaphoreList*          lock;
+      };
 
       const char*               name_;
       int32                     count_;
       bool                      fair_;
-      struct List
-      {
-        SemaphoreList           exec;
-        SemaphoreList           lock;
-      }                         list_;
+      List                      list_;
 
       void                      construct(int32, bool, const char*);
+      void                      destruct();
+      void                      removeList(SemaphoreList*);
+      bool                      isAlloc();
   };
 }
 #endif //OSCORE_SEMAPHORE_H_

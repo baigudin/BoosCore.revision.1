@@ -7,15 +7,17 @@
  * @link      http://baigudin.com
  */
 #include "rts.h"
-#include "oscore_config.h"
 #include "oscore_interrupt.h" 
 #include "oscore_thread.h" 
 #include "oscore_object.h"
 #include "oscore_object_page.hpp"
 #include "oscore_object_memory.hpp"
+#include "oscore_config.h"
 
 namespace oscore
 {
+  int32 Object::idCount_ = 1;  
+
   /** 
    * Constructor
    */
@@ -23,7 +25,12 @@ namespace oscore
   {
     memory_ = (ObjectMemory*)((uint32)this - sizeof(ObjectMemory));
     if((memory_->isMemory() && memory_->page_->isMemory()) == false) memory_ = NULL;
-    errno_ = OSE_OK;
+    if(idCount_ == 0) setError(OSE_ID);
+    else
+    {
+      id_ = idCount_++;    
+      setError(OSE_OK);
+    }
   } 
   
   /** 
@@ -33,6 +40,16 @@ namespace oscore
   {
   }
   
+  /** 
+   * Get object ID
+   *
+   * @return int32
+   */  
+  int32 Object::getId()
+  {
+    return id_;
+  }
+  
   /**
    * Get error number
    *
@@ -40,8 +57,18 @@ namespace oscore
    */  
   int32 Object::getError()
   {
-    return errno_;
+    return error_;
   }
+  
+  /**
+   * Set error number
+   *
+   * @return void
+   */  
+  void Object::setError(int32 error)
+  {
+    error_ = error;
+  }  
 
   /**
    * Get error string
@@ -58,6 +85,7 @@ namespace oscore
        case OSE_CMD:   return "Command error";       
        case OSE_MEM:   return "Memory error";
        case OSE_HW:    return "Hardware error";
+       case OSE_ID:    return "Error object ID";       
        case OSE_ALLOC: return "Alloced error";
        case OSE_RES:   return "Resource error";
        case OSE_BUSY:  return "Something is busy";
@@ -74,78 +102,6 @@ namespace oscore
   bool Object::onHeap()
   {
     return (memory_ == NULL) ? false : true;
-  }
-  
-  /**
-   * Operator new
-   *
-   * @param uint32 size Size in byte
-   * @return void* Allocated memory address or NULL, if error
-   */
-  void* Object::operator new(uint32 size)
-  {
-    return memAlloc(size);
-  }
-  
-  /**
-   * Operator new
-   *
-   * @param uint32      Unused
-   * @param void*  prt Address of memory
-   * @return void* Address of memory
-   */
-  void* Object::operator new(uint32, void* ptr)
-  {
-    return ptr;
-  }
-  
-  /**
-   * Operator delete
-   *
-   * @param void* addr Address of allocated memory
-   * @return void
-   */
-  void Object::operator delete(void* ptr)
-  {
-    memFree(ptr);
-  }
-  
-  /**
-   * Operator new[]
-   *
-   * @param uint32     Unused
-   * @param void*  prt Address of memory
-   * @return void* Address of memory      
-   */
-  void* Object::operator new[](uint32, void* ptr)
-  {
-    return NULL;
-  }
-  
-  /**
-   * Operator new[]
-   */
-  void* Object::operator new[](uint32 size)
-  {
-    return NULL;
-  }
-
-  /**
-   * Operator delete[]
-   */  
-  void Object::operator delete[](void* ptr)   
-  {
-  }
-  
-  /**
-   * Set error number
-   *
-   * @return int32 Error code or zero
-   */  
-  int32 Object::setError(int32 errno)
-  {
-    errno_ = errno;
-    return getError();
   }
   
   /**
@@ -239,5 +195,80 @@ namespace oscore
   bool Object::memRemove(void* addr)
   {
     return false; //TODO
+  }
+  
+  /**
+   * Operator new
+   *
+   * @param uint32 size Size in byte
+   * @return void* Allocated memory address or NULL, if error
+   */
+  void* Object::operator new(uint32 size)
+  {
+    return memAlloc(size);
+  }
+  
+  /**
+   * Operator new
+   *
+   * @param uint32      Unused
+   * @param void*  prt Address of memory
+   * @return void* Address of memory
+   */
+  void* Object::operator new(uint32, void* ptr)
+  {
+    return ptr;
+  }
+  
+  /**
+   * Operator new[]
+   *
+   * @param uint32     Unused
+   * @param void*  prt Address of memory
+   * @return void* Address of memory      
+   */
+  void* Object::operator new[](uint32, void* ptr)
+  {
+    return NULL;
+  }
+  
+  /**
+   * Operator new[]
+   */
+  void* Object::operator new[](uint32 size)
+  {
+    return NULL;
+  }
+  
+  /**
+   * Operator delete
+   *
+   * @param void* addr Address of allocated memory
+   * @return void
+   */
+  void Object::operator delete(void* ptr)
+  {
+    memFree(ptr);
+  }
+
+  /**
+   * Operator delete[]
+   */  
+  void Object::operator delete[](void* ptr)   
+  {
+  }
+  
+  /**
+   * Operator delete
+   */  
+  void Object::operator delete(void*, void*)
+  {
+  }
+  
+  /**
+   * Operator delete[]
+   */  
+  void Object::operator delete[](void*, void*)
+  {
   }
 }

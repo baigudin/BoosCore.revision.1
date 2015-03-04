@@ -20,12 +20,6 @@ namespace oscore
                                 Resource();
       virtual                  ~Resource();
       virtual bool              isBlocked();
-      int32                     getId();
-  
-    private:
-
-      int32                     id_;
-      static int32              idCount_;
   };
 }
 #endif //OSCORE_RESOURCE_H_

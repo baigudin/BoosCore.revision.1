@@ -13,6 +13,9 @@
 
 namespace oscore
 {
+  class  InterruptHandler;
+  struct Register;
+
   class Interrupt : public Resource
   {
     public:
@@ -40,25 +43,24 @@ namespace oscore
         SD_INTB     = 0x14,     //EMIFB SDRAM timer interrupt
         PCI_WAKEUP  = 0x15,     //PCI wakeup interrupt
         UINT        = 0x17,     //UTOPIA interupt
-        NMI         = 0xe0,     //NMI interrupt
-        TIMER       = TINT0     //Timer 0 interrupt
+        NMI         = 0xe0      //NMI interrupt
       };
 
-                                Interrupt(Source, void(*)());
+                                Interrupt(Source, InterruptHandler*);
       virtual                  ~Interrupt();
       void                      lock();
       void                      unlock();
       void                      set();
       void                      clear();
+      void                      jump();
       static int32              disable();     //Describe in ASM file
       static void               enable(int32); //Describe in ASM file
+    
+    protected:
 
-      template <typename Type> 
-      static Type enableReturn(int32 is, Type ret)
-      {
-        enable(is);
-        return ret;
-      }
+                                Interrupt();
+      int32                     setSource(Source, InterruptHandler*);
+      void                      removeSource();
 
     private:
 
@@ -71,7 +73,7 @@ namespace oscore
       struct Vector
       {
         Source                  source;
-        void                    (*handler)();
+        InterruptHandler*       handler;
         uint32                  number;
         Mux                     mux;
       };
@@ -80,17 +82,24 @@ namespace oscore
 
       Vector*                   vector_;
       static Vector             vectors_[NUMBER_VECTORS];
+      static void*              stack_;
+      static Register*          pointer_;
+      static Register*          register_;
 
-      bool                      setMux(Source, uint32, Mux*);
       bool                      isAlloc();
+      bool                      setMux(Source, uint32, Mux*);
       static bool               init();
       static bool               deinit();
-      static int32              lowLock(uint32);   //Describe in ASM file
-      static int32              lowUnlock(uint32); //Describe in ASM file
-      static int32              lowSet(uint32);    //Describe in ASM file
-      static int32              lowClear(uint32);  //Describe in ASM file
+      static void               handle(int32);
+      static void               setRegister(Register*);
+      static int32              lockLow(uint32);   //Describe in ASM file
+      static int32              unlockLow(uint32); //Describe in ASM file
+      static int32              setLow(uint32);    //Describe in ASM file
+      static int32              clearLow(uint32);  //Describe in ASM file
+      static void               jumpLow(uint32);   //Describe in ASM file
 
       friend class              System;
+      friend class              Thread;
   };
 }
 #endif //OSCORE_INTERRUPT_H_

@@ -1,36 +1,38 @@
-/** 
- * Resource of OS module
+/**
+ * Thread interrupt handler
  * 
  * @author    Sergey Baigudin <baigudin@mail.ru>
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
  */
-#include "oscore_resource.h"
+#include "rts.h"
+#include "oscore_thread.h"
+#include "oscore_thread_handler.h"
 
 namespace oscore
 {
   /** 
    * Constructor
    */
-  Resource::Resource()
+  ThreadHandler::ThreadHandler()
   {
   }
   
   /** 
    * Destructor
    */
-  Resource::~Resource()
+  ThreadHandler::~ThreadHandler()
   {
   }
-
-  /** 
-   * Checking resource is blocked
+  
+  /**
+   * Handler
    *
-   * @return bool
+   * @return void
    */  
-  bool Resource::isBlocked()
+  void ThreadHandler::handle()
   {
-    return false;
+    Thread::sheduler();
   }
 }

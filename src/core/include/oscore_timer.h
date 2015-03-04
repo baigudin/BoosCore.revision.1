@@ -34,8 +34,6 @@ namespace oscore
       uint32                    getPeriod();
       void                      setPeriod(uint32 =0);
       void                      start();
-      void                      stop();
-      void                      reset();
 
     private:
 

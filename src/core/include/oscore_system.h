@@ -21,6 +21,7 @@ namespace oscore
 
       static uint64             currentTimeMillis();
       static uint64             nanoTime();
+      static void               exit(int32);
 
     private:
 
@@ -35,14 +36,13 @@ namespace oscore
       {
         Timer*                  hwTim;
       }                         res_;
-      static uint32             tos_;
 
       static bool               init();
       static bool               deinit();
       static void               start();
       static void               sheduler();
       static void               updateTime();
-      static void               lowInitClasses(); //Describe in ASM file
+      static void               initClassesLow(); //Describe in ASM file
 
       friend class              Thread;
   };

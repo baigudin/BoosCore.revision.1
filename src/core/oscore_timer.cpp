@@ -7,10 +7,10 @@
  * @link      http://baigudin.com
  */
 #include "rts.h"
-#include "oscore_config.h"
 #include "oscore_interrupt.h" 
 #include "oscore_timer.h"
 #include "oscore_timer_hw.h"
+#include "oscore_config.h"
 
 namespace oscore
 {

@@ -6,7 +6,6 @@
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
  */
-
 namespace oscore
 {
   /**
@@ -18,14 +17,13 @@ namespace oscore
    */
   static const uint64 SYS_FREQUENCY = 720000000ull;                              
   /**
-   * System stack TOS
+   * Size of default stack
    */
-  static const uint32 SYS_STACK = 0x2000;           
+  static const uint32 SYS_STACK_SIZE = 0x2000;           
   /**
    * Priority of main thread
    */
   static const uint32 SYS_MAIN_THREAD_PRIORITY = 5;
-
   /**
    * System stack TOS
    */

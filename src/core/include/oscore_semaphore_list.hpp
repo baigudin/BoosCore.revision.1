@@ -17,6 +17,9 @@ namespace oscore
   {
     public:
 
+      using osutil::ArrayList::get;
+      using osutil::ArrayList::remove;
+
       /** 
        * Constructor
        */
@@ -31,6 +34,53 @@ namespace oscore
       virtual ~SemaphoreList()
       {
       }
+
+      /**
+       * Push element to fifo
+       *
+       * @param Thread* res
+       * @param int32   permits
+       * @return void
+       */
+      void push(Thread* res, int32 permits)
+      {
+        while(add(0, res) == false) Thread::yield();
+        setPermits(0, permits);
+      }
+
+      /**
+       * Get element from this list by index
+       *
+       * @return Thread*
+       */
+      Thread* pop()
+      {
+        return (Thread*) get(size() - 1);
+      }
+
+      /**
+       * Remove last element from this list
+       *
+       * @return bool
+       */
+      bool remove()
+      {
+        return remove(size() - 1);
+      }
+
+
+      /**
+       * Get permits value
+       *
+       * @return bool
+       */
+      int32 getPermits()
+      {
+        return getPermits(size() - 1);
+      }
+
+
+    private:
 
       /**
        * Get permits value
