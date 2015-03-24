@@ -1,7 +1,7 @@
 /** 
- * Core of Operation System
+ * System class of core.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -20,8 +20,8 @@ namespace oscore
     public:
 
       static uint64             currentTimeMillis();
-      static uint64             nanoTime();
       static void               exit(int32);
+      static uint64             nanoTime();
 
     private:
 

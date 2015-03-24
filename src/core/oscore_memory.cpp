@@ -1,7 +1,7 @@
 /** 
- * Memory module
+ * Heap memory of system.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -11,10 +11,10 @@
 namespace oscore
 {
   /**
-   * Allocate of memory
+   * Allocate memory.
    *
-   * @param uint32 size Size in byte
-   * @return void* Allocated memory address or NULL, if error
+   * @param size size in byte.
+   * @return pointer to allocate memory or NULL, if no memory.
    */  
   void* Memory::alloc(uint32 size)
   {
@@ -22,10 +22,10 @@ namespace oscore
   }
 
   /**
-   * Free allocated memory
+   * Free allocated memory.
    *
-   * @param void* prt Address of allocated memory
-   * @return int32 Error code or zero
+   * @param void* pointer of allocate memory.
+   * @return zero if memory is free or error code.
    */  
   int32 Memory::free(void* prt)
   {

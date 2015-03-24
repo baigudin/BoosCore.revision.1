@@ -1,7 +1,7 @@
 /** 
- * Abstract list class
+ * Skeletal implementation of the List interface.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -13,24 +13,24 @@ namespace osutil
   using namespace oscore;
   
   /** 
-   * Constructor
+   * Constructor.
    */
   AbstractList::AbstractList()
   {
   }
 
   /**
-   * Destructor
+   * Destructor.
    */
   AbstractList::~AbstractList()
   {
   }
 
   /**
-   * Added element to the end of this list
+   * Added element to the end of this list.
    *
-   * @param Object* obj
-   * @return bool
+   * @param obj pointer to any object of system.
+   * @return true if element is added.
    */
   bool AbstractList::add(Object* obj)
   {
@@ -38,11 +38,11 @@ namespace osutil
   }
   
   /**
-   * Inserts the specified element at the specified position in this list
+   * Inserts the specified element at the specified position in this list.
    *
-   * @param int32 index   
-   * @param Object* obj
-   * @return bool
+   * @param index position in this list.  
+   * @param obj pointer to any object of system.
+   * @return true if element is inserted.
    */
   bool AbstractList::add(int32 index, Object* obj)
   {
@@ -51,19 +51,17 @@ namespace osutil
   
   
   /**
-   * Removes all of the elements from this list 
-   *
-   * @return void
+   * Removes all of the elements from this list.
    */  
   void AbstractList::clear()
   {
   }
   
   /**
-   * Remove element from this list
+   * Remove element from this list.
    *
-   * @param Object* obj
-   * @return bool
+   * @param obj pointer to any object of system.
+   * @return true if element is removed.
    */
   bool AbstractList::remove(Object* obj)
   {
@@ -71,10 +69,10 @@ namespace osutil
   }
   
   /**
-   * Remove element from this list
+   * Remove element from this list.
    *
-   * @param int32 index
-   * @return bool
+   * @param index position in this list.  
+   * @return true if element is removed.
    */
   bool AbstractList::remove(int32 index)
   {
@@ -82,10 +80,10 @@ namespace osutil
   }  
   
   /**
-   * Get element from this list by index
+   * Get element from this list by index.
    *
-   * @param int32 index
-   * @return Object*
+   * @param index position in this list.  
+   * @return pointer to object of system in this list.
    */
   Object* AbstractList::get(int32 index)
   {
@@ -93,9 +91,9 @@ namespace osutil
   }
   
   /**
-   * Returns the number of elements in this list
+   * Returns the number of elements in this list.
    *
-   * @return int32
+   * @return number of elements.
    */
   int32 AbstractList::size()
   {
@@ -103,11 +101,11 @@ namespace osutil
   }
   
   /**
-   * Returns an array containing all links to the Objects
+   * Returns an array containing all links to the Objects of list.
    *
-   * You must call "delete[]" for return value after it using
+   * You must call <code>delete[]</code> for return value after it using.
    *
-   * @return Object**
+   * @return pointer to pointer of objects, or NULL if no elements.
    */  
   Object** AbstractList::toArray()
   {

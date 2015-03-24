@@ -1,7 +1,7 @@
 /** 
- * Array list class
+ * Array list class.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -13,7 +13,7 @@ namespace osutil
   using namespace oscore;
   
   /** 
-   * Constructor
+   * Constructor.
    */
   ArrayList::ArrayList()
   {
@@ -27,7 +27,7 @@ namespace osutil
   }
 
   /**
-   * Destructor
+   * Destructor.
    */
   ArrayList::~ArrayList()
   {
@@ -41,10 +41,10 @@ namespace osutil
   }
   
   /**
-   * Added element to the end of this list
+   * Added element to the end of this list.
    *
-   * @param Object* obj
-   * @return bool
+   * @param obj pointer to any object of system.
+   * @return true if element is added.
    */
   bool ArrayList::add(Object* obj)
   {
@@ -53,11 +53,11 @@ namespace osutil
   
   
   /**
-   * Inserts the specified element at the specified position in this list
+   * Inserts the specified element at the specified position in this list.
    *
-   * @param int32 index   
-   * @param Object* obj
-   * @return bool
+   * @param index position in this list.  
+   * @param obj pointer to any object of system.
+   * @return true if element is inserted.
    */
   bool ArrayList::add(int32 index, Object* obj)
   {
@@ -110,9 +110,7 @@ namespace osutil
   }
   
   /**
-   * Removes all of the elements from this list 
-   *
-   * @return void
+   * Removes all of the elements from this list.
    */  
   void ArrayList::clear()
   {
@@ -121,10 +119,10 @@ namespace osutil
   }
 
   /**
-   * Remove element from this list
+   * Remove element from this list.
    *
-   * @param Object* obj
-   * @return bool
+   * @param obj pointer to any object of system.
+   * @return true if element is removed.
    */
   bool ArrayList::remove(Object* obj)
   {
@@ -134,10 +132,10 @@ namespace osutil
   }
   
   /**
-   * Remove element from this list
+   * Remove element from this list.
    *
-   * @param int32 index
-   * @return bool
+   * @param index position in this list.  
+   * @return true if element is removed.
    */
   bool ArrayList::remove(int32 index)
   {
@@ -147,10 +145,10 @@ namespace osutil
   }  
   
   /**
-   * Get element from this list by index
+   * Get element from this list by index.
    *
-   * @param int32 index
-   * @return Object*
+   * @param index position in this list.  
+   * @return pointer to object of system in this list.
    */
   Object* ArrayList::get(int32 index)
   {
@@ -160,9 +158,9 @@ namespace osutil
   }
   
   /**
-   * Returns the number of elements in this list
+   * Returns the number of elements in this list.
    *
-   * @return int32
+   * @return number of elements.
    */
   int32 ArrayList::size()
   {
@@ -170,7 +168,7 @@ namespace osutil
   }
 
   /**
-   * Creating new object
+   * Creating new object of this class.
    *
    * @return ArrayList*
    */  
@@ -180,10 +178,10 @@ namespace osutil
   } 
   
   /**
-   * Get item
+   * Get self element from list struct.
    *
-   * @param Object* obj 
-   * @return ArrayList*
+   * @param obj pointer to any object of system.
+   * @return pointer to private self element.
    */
   ArrayList* ArrayList::getChild(Object* obj)
   {
@@ -200,10 +198,10 @@ namespace osutil
   }  
   
   /**
-   * Get item
+   * Get self element from list struct.
    *
-   * @param int32
-   * @return ArrayList*
+   * @param index position in this list.  
+   * @return pointer to private self element.
    */
   ArrayList* ArrayList::getChild(int32 index)
   {
@@ -215,14 +213,14 @@ namespace osutil
   
   
   /**
-   * Remove element from this list
+   * Remove self element from this list
    *
-   * @param ArrayList* item
-   * @return bool
+   * @param item pointer to private self element.
+   * @return true if element is removed.
    */
   bool ArrayList::removeChild(ArrayList* item)
   {
-    if(item == NULL) return NULL;
+    if(item == NULL) return false;
     //Reindex list:
     ArrayList* temp = item;
     while(temp != child_)
@@ -250,10 +248,10 @@ namespace osutil
   
   
   /**
-   * Check index
+   * Check index is present in list
    *
-   * @param int32
-   * @return bool
+   * @param index checked position in this list.
+   * @return true if index is present
    */  
   bool ArrayList::isIndex(int32 index)
   {
@@ -261,10 +259,10 @@ namespace osutil
   }  
   
   /**
-   * Check index
+   * Check index is out of list bounds.
    *
-   * @param int32
-   * @return bool
+   * @param index checked position in this list.
+   * @return true if index is out.
    */  
   bool ArrayList::isIndexOutOfBounds(int32 index)
   {

@@ -1,7 +1,7 @@
 /** 
- * Interrupt module
+ * Hardware interrupt resource.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -48,19 +48,19 @@ namespace oscore
 
                                 Interrupt(Source, InterruptHandler*);
       virtual                  ~Interrupt();
-      void                      lock();
-      void                      unlock();
-      void                      set();
       void                      clear();
       void                      jump();
+      void                      lock();
+      void                      set();
+      void                      unlock();
       static int32              disable();     //Describe in ASM file
       static void               enable(int32); //Describe in ASM file
     
     protected:
 
                                 Interrupt();
-      int32                     setSource(Source, InterruptHandler*);
       void                      removeSource();
+      int32                     setSource(Source, InterruptHandler*);
 
     private:
 

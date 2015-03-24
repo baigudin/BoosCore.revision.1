@@ -1,7 +1,7 @@
 /** 
- * Object of OS
+ * Root class of the system class hierarchy.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -37,7 +37,6 @@ namespace oscore
 
                                 Object();
       virtual                  ~Object();
-      virtual int32             getId();
       virtual int32             getError();
       virtual const char*       getErrorString(int32);
       bool                      onHeap();
@@ -53,22 +52,20 @@ namespace oscore
     protected:
 
       void                      setError(int32);
+      static void*              memAdd(void*, uint32);
       static void*              memAlloc(uint32);
       static bool               memFree(void*);
-      static void*              memAdd(void*, uint32);
       static bool               memRemove(void*);
 
     private:
 
       ObjectMemory*             memory_;
       int32                     error_;
-      int32                     id_;
-      static int32              idCount_;
 
       static bool               init();
       static bool               deinit();
-                                Object(const Object&);     //Copy not allowed
-      void                      operator= (const Object&); //Assignment not allowed
+                                Object(const Object&);    //Copy not allowed
+      void                      operator=(const Object&); //Assignment not allowed
 
       friend class              System;
       friend struct             ObjectPage;

@@ -1,7 +1,7 @@
 /**
- * Semaphore module
+ * Semaphore class.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -16,70 +16,39 @@
 namespace oscore
 {
   /** 
-   * Constructor
+   * Constructor.
+   *
+   * @param permits the initial number of permits available.   
    */
   Semaphore::Semaphore(int32 permits)
   {
-    construct(permits, false, NULL);  
+    construct(permits, false);  
   }
   
   /** 
-   * Constructor
-   */
-  Semaphore::Semaphore(int32 permits, const char* name)
-  {
-    construct(permits, false, name);  
-  }  
-  
-  /** 
-   * Constructor
+   * Constructor.
+   *
+   * @param permits the initial number of permits available.      
+   * @param fair true if this semaphore will guarantee FIFO granting of permits under contention.
    */
   Semaphore::Semaphore(int32 permits, bool fair) 
   {
-    construct(permits, fair, NULL);
+    construct(permits, fair);
   }
   
   /** 
-   * Constructor
-   */
-  Semaphore::Semaphore(int32 permits, bool fair, const char* name) 
-  {
-    construct(permits, fair, name);  
-  }
-  
-  /** 
-   * Destructor
+   * Destructor.
    */
   Semaphore::~Semaphore()
   {
-    destruct();
+    delete list_.exec;
+    delete list_.lock;
   }
   
   /**
-   * Acquires a permit
+   * Check semaphore is blocked.
    *
-   * @param int32 permits
-   * @return void
-   */  
-  void Semaphore::acquire()
-  {
-    acquire(1);
-  }
- 
-  /**
-   * Releases a permit
-   *
-   * @return void
-   */  
-  void Semaphore::release()
-  {
-    release(1);
-  }  
-  
-  /**
-   * Checking resource is blocked
-   *
-   * @return bool
+   * @return true if this semaphore is block.
    */
   bool Semaphore::isBlocked()
   {
@@ -108,12 +77,27 @@ namespace oscore
     Interrupt::enable(is);
     return false;
   }
+  
+  /**
+   * Acquires a permit, blocking until one is available.
+   */  
+  void Semaphore::acquire()
+  {
+    acquire(1);
+  }
+ 
+  /**
+   * Releases a permit.
+   */  
+  void Semaphore::release()
+  {
+    release(1);
+  }    
 
   /**
-   * Acquires the given number of permits
+   * Acquires the given number of permits.
    *
-   * @param int32 permits
-   * @return void
+   * @param permits the number of permits to acquire.
    */  
   void Semaphore::acquire(int32 permits)
   {
@@ -138,10 +122,9 @@ namespace oscore
   }
   
   /**
-   * Releases the given number of permits
+   * Releases the given number of permits.
    *
-   * @param int32 permits
-   * @return void
+   * @param permits the number of permits to release.
    */  
   void Semaphore::release(int32 permits)
   {
@@ -152,13 +135,12 @@ namespace oscore
   }
   
   /**
-   * Remove first element from fifo list
+   * Remove first element from fifo list.
    *
    * Element is removing if it's element of current thread, else wait.
    * Function complented after removing.
    *
-   * @param SemaphoreList* list
-   * @return void
+   * @param list pointer to SemaphoreList class
    */  
   void Semaphore::removeList(SemaphoreList* list)
   {
@@ -172,15 +154,13 @@ namespace oscore
   }  
 
   /**
-   * Semaphore constructor
+   * Semaphore class constructor.
    *
-   * @param int32 permits
-   * @param bool  fair    
-   * @return void
+   * @param permits the initial number of permits available.      
+   * @param fair true if this semaphore will guarantee FIFO granting of permits under contention.
    */
-  void Semaphore::construct(int32 permits, bool fair, const char* name)
+  void Semaphore::construct(int32 permits, bool fair)
   {
-    name_ = name;
     count_ = permits;
     fair_ = fair;
     list_.exec = new SemaphoreList();
@@ -194,27 +174,4 @@ namespace oscore
       System::exit(OSE_MEM);
     }
   }
-  
-  /**
-   * Destructor
-   *
-   * @return void
-   */  
-  void Semaphore::destruct()
-  {
-    delete list_.exec;
-    delete list_.lock;
-  }
-  
-  /**
-   * Current object is have hw timer
-   *
-   * @return bool
-   */  
-  bool Semaphore::isAlloc()
-  {
-    return (list_.exec == NULL || list_.lock == NULL) ? false : true;
-  }
-   
-  
 }

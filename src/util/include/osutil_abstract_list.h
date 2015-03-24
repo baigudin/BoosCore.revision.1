@@ -1,7 +1,7 @@
 /** 
- * Abstract list class
+ * Skeletal implementation of the List interface.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -20,12 +20,12 @@ namespace osutil
 
                                 AbstractList();
       virtual                  ~AbstractList();
-      virtual bool              add(oscore::Object*);
       virtual bool              add(int32, oscore::Object*);
+      virtual bool              add(oscore::Object*);
       virtual void              clear();
-      virtual bool              remove(oscore::Object*);
-      virtual bool              remove(int32);
       virtual oscore::Object*   get(int32);
+      virtual bool              remove(int32);
+      virtual bool              remove(oscore::Object*);
       virtual int32             size();
       virtual oscore::Object**  toArray();
   };

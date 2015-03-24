@@ -1,7 +1,7 @@
 ; ----------------------------------------------------------------------------
 ; Core of Operation System
 ;
-; @author    Sergey Baigudin <baigudin@mail.ru>
+; @author    Sergey Baigudin, baigudin@mail.ru
 ; @copyright 2014-2015 Sergey Baigudin
 ; @license   http://baigudin.com/license/
 ; @link      http://baigudin.com

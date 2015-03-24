@@ -1,7 +1,7 @@
 /** 
- * Semaphore list class
+ * Semaphore list class.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -21,7 +21,7 @@ namespace oscore
       using osutil::ArrayList::remove;
 
       /** 
-       * Constructor
+       * Constructor.
        */
       SemaphoreList() : osutil::ArrayList()
       {
@@ -29,18 +29,17 @@ namespace oscore
       }
 
       /** 
-       * Destructor
+       * Destructor.
        */
       virtual ~SemaphoreList()
       {
       }
 
       /**
-       * Push element to fifo
+       * Push element to fifo.
        *
-       * @param Thread* res
-       * @param int32   permits
-       * @return void
+       * @param res pointer to Thread resource.
+       * @param permits permits of semaphore
        */
       void push(Thread* res, int32 permits)
       {
@@ -49,9 +48,9 @@ namespace oscore
       }
 
       /**
-       * Get element from this list by index
+       * Get element from this list by index.
        *
-       * @return Thread*
+       * @return pointer to Thread resource.
        */
       Thread* pop()
       {
@@ -59,9 +58,9 @@ namespace oscore
       }
 
       /**
-       * Remove last element from this list
+       * Remove last element from this list.
        *
-       * @return bool
+       * @return true if element is removed.
        */
       bool remove()
       {
@@ -70,9 +69,9 @@ namespace oscore
 
 
       /**
-       * Get permits value
+       * Get permits semaphore value.
        *
-       * @return bool
+       * @return permits of semaphore.
        */
       int32 getPermits()
       {
@@ -83,9 +82,9 @@ namespace oscore
     private:
 
       /**
-       * Get permits value
+       * Get permits semaphore value.
        *
-       * @return bool
+       * @return permits of semaphore.
        */
       int32 getPermits(int32 index)
       {
@@ -96,7 +95,8 @@ namespace oscore
       /**
        * Set permits value
        *
-       * @return bool
+       * @param index position in this list.
+       * @param permits permits of semaphore
        */
       void setPermits(int32 index, int32 permits)
       {
@@ -107,9 +107,9 @@ namespace oscore
     protected:
 
       /**
-       * Creating new object
+       * Creating new object of this class.
        *
-       * @return ArrayList*
+       * @return pointer to new list object.
        */  
       virtual SemaphoreList* create()
       {

@@ -1,7 +1,7 @@
 /** 
- * Resource of OS module
+ * Abstarct Resource class of system.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -10,24 +10,39 @@
 
 namespace oscore
 {
+  int32 Resource::idCount_ = 1;  
+  
   /** 
-   * Constructor
+   * Constructor.
    */
   Resource::Resource()
   {
+    if(getError() != OSE_OK) return;
+    id_ = (idCount_ > 0) ? idCount_++ : -1;    
+    if(id_ <= 0) setError(OSE_ID);    
   }
   
   /** 
-   * Destructor
+   * Destructor.
    */
   Resource::~Resource()
   {
   }
+  
+  /** 
+   * Get resource identifier.
+   *
+   * @return this resource ID.
+   */  
+  int32 Resource::getId() const
+  {
+    return id_;
+  }  
 
   /** 
-   * Checking resource is blocked
+   * Check resource is blocked.
    *
-   * @return bool
+   * @return true if this resource is block.
    */  
   bool Resource::isBlocked()
   {

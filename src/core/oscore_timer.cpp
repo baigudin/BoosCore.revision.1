@@ -1,7 +1,7 @@
 /** 
- * Hardware Timer resource
+ * Hardware timer resource.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -17,9 +17,9 @@ namespace oscore
   bool Timer::lock_[NUMBER_TIMERS] = {false, false, false};
   
   /** 
-   * Constructor
+   * Constructor.
    *
-   * @param uint32 number Number of system timer
+   * Construct Timer object and alloc first free HW timer.
    */
   Timer::Timer()
   {
@@ -32,9 +32,9 @@ namespace oscore
   }  
 
   /** 
-   * Constructor
+   * Constructor.
    *
-   * @param uint32 number Number of system timer
+   * @param number enum Timer::Number.
    */
   Timer::Timer(Number number)
   {
@@ -42,10 +42,9 @@ namespace oscore
   }
   
   /**
-   * Timer constructor
+   * Timer class constructor.
    *
-   * @param Runnable* target    
-   * @return void
+   * @param number enum Timer::Number.
    */
   void Timer::construct(Number number)
   {
@@ -73,7 +72,7 @@ namespace oscore
   }  
 
   /** 
-   * Destructor
+   * Destructor.
    */
   Timer::~Timer()
   {
@@ -88,9 +87,9 @@ namespace oscore
   }
   
   /**
-   * Get timer period
+   * Get timer period.
    *
-   * @return void
+   * @return timer period register value.
    */  
   uint32 Timer::getPeriod()
   {
@@ -99,10 +98,9 @@ namespace oscore
   }  
   
   /**
-   * Set timer period
+   * Set timer period.
    *
-   * @param uint32 us Period in micro seconds, zero is set timer to maxinum value
-   * @return void
+   * @param us timer period in microseconds, zero is set period to maxinum value.
    */  
   void Timer::setPeriod(uint32 us)
   {
@@ -120,9 +118,9 @@ namespace oscore
   }
   
   /**
-   * Get timer count
+   * Get timer counter.
    *
-   * @return uint32
+   * @return timer counter register value.   
    */  
   uint32 Timer::getCount()
   {
@@ -131,10 +129,9 @@ namespace oscore
   }
   
   /**
-   * Set timer count
+   * Set timer counter.
    *
-   * @param uint32 count Counter value
-   * @return void
+   * @param count timer counter rerister value.
    */  
   void Timer::setCount(uint32 count)
   {
@@ -144,9 +141,7 @@ namespace oscore
   }      
   
   /**
-   * Timer start
-   *
-   * @return this
+   * Start timer count.
    */  
   void Timer::start()
   {
@@ -154,24 +149,17 @@ namespace oscore
   }
       
   /**
-   * Timer stop
-   *
-   * @return void
+   * Stop timer count.
    */  
   void Timer::stopCount()
   {
     if(isAlloc() == true) reg_->ctl = TCTL_SPND | TCTL_CLKSRC;
   }
   
-  void Timer::allowCount()
-  {
-    reg_->ctl = TCTL_SPND | TCTL_CLKSRC | TCTL_HLD;
-  }
-  
   /**
-   * Current object is have hw timer
+   * Current object is have hw timer.
    *
-   * @return bool
+   * @return true if object is have timer source.   
    */  
   bool Timer::isAlloc()
   {
@@ -179,9 +167,9 @@ namespace oscore
   }
   
   /**
-   * Initialization
+   * Initialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool Timer::init()
   {
@@ -190,9 +178,9 @@ namespace oscore
   }
   
   /**
-   * Deinitialization
+   * Deinitialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool Timer::deinit()
   {
@@ -201,9 +189,7 @@ namespace oscore
   } 
  
   /**
-   * Reset all HW registers
-   *
-   * @return void
+   * Reset all HW registers.
    */
   void Timer::regReset()
   {

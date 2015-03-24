@@ -1,7 +1,7 @@
 /** 
  * Page of memory for system objects
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -32,7 +32,11 @@ namespace oscore
       }                         page_;
 
       /**
-       * Operator new
+       * Operator new.
+       *
+       * @param size unused.
+       * @param prt  address of memory.
+       * @return address of memory.
        */   
       void* operator new(uint32, void* ptr)
       {
@@ -41,11 +45,11 @@ namespace oscore
       }
 
       /** 
-       * Create page
+       * Create page.
        *
-       * @param void*  addr Address of page
-       * @param uint32 size Size of page in sizeof
-       * @return ObjectPage*
+       * @param addr address of page.
+       * @param size size of page in sizeof.
+       * @return pointer to ObjectPage.
        */
       static ObjectPage* init(void* addr, uint32 size)
       {
@@ -55,9 +59,9 @@ namespace oscore
       }
 
       /**
-       * Get first free data address
+       * Get first free data address.
        *
-       * @return ObjectMemory*
+       * @return pointer to ObjectMemory.
        */
       ObjectMemory* data()
       {
@@ -66,11 +70,10 @@ namespace oscore
 
 
       /**
-       * Test of memory page
+       * Test of memory page.
        *
-       * @param void*  page Start address test
-       * @param uint32 size Size in byte
-       * @return bool
+       * @param size size in byte.
+       * @return true if test complete.
        */
       bool test(uint32 size)
       {
@@ -100,9 +103,9 @@ namespace oscore
       }
 
       /**
-       * Reset page data struct
+       * Reset page data struct.
        *
-       * @return int32 Error code or zero
+       * @return pointer to this object.
        */
       ObjectPage* reset(uint32 size)
       {
@@ -118,9 +121,9 @@ namespace oscore
       }
 
       /**
-       * Linking new memory page into page list
+       * Linking new memory page into page list.
        *
-       * @return int32 Error code or zero
+       * @return pointer to this object.
        */
       ObjectPage* link()
       {
@@ -139,9 +142,9 @@ namespace oscore
       }
 
       /**
-       * Check available page
+       * Check available page.
        *
-       * @return bool
+       * @return true if page is available.
        */  
       bool isMemory()
       {

@@ -1,7 +1,7 @@
 /** 
- * Array list class
+ * Array list class.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -14,14 +14,14 @@ namespace osutil
   using namespace oscore;
   
   /** 
-   * Constructor
+   * Constructor.
    */
   TreeList::TreeList()
   {
   }
 
   /**
-   * Destructor
+   * Destructor.
    */
   TreeList::~TreeList()
   {

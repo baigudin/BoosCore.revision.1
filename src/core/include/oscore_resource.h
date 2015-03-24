@@ -1,7 +1,7 @@
 /** 
- * Resource of OS module
+ * Abstarct Resource class of system.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -20,6 +20,12 @@ namespace oscore
                                 Resource();
       virtual                  ~Resource();
       virtual bool              isBlocked();
+      int32                     getId() const;
+
+    private:
+
+      int32                     id_;
+      static int32              idCount_;
   };
 }
 #endif //OSCORE_RESOURCE_H_

@@ -1,7 +1,7 @@
 /**
- * Semaphore module
+ * Semaphore class.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -20,9 +20,7 @@ namespace oscore
     public:
 
                                 Semaphore(int32);
-                                Semaphore(int32, const char*);
                                 Semaphore(int32, bool);
-                                Semaphore(int32, bool, const char*);
       virtual                  ~Semaphore();
       virtual bool              isBlocked();
       void                      acquire();
@@ -38,15 +36,12 @@ namespace oscore
         SemaphoreList*          lock;
       };
 
-      const char*               name_;
       int32                     count_;
       bool                      fair_;
       List                      list_;
 
-      void                      construct(int32, bool, const char*);
-      void                      destruct();
+      void                      construct(int32, bool);
       void                      removeList(SemaphoreList*);
-      bool                      isAlloc();
   };
 }
 #endif //OSCORE_SEMAPHORE_H_

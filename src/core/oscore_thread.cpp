@@ -1,7 +1,7 @@
 /**
- * Thread module
+ * Thread class.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -31,7 +31,7 @@ namespace oscore
   bool                   Thread::lockSwitch_ = false;
   
   /** 
-   * Constructor
+   * Constructor.
    */
   Thread::Thread()
   {
@@ -39,9 +39,9 @@ namespace oscore
   }
   
   /** 
-   * Constructor
+   * Constructor.
    *
-   * @param char* name
+   * @param name name of this thread.
    */
   Thread::Thread(const char* name)
   {
@@ -49,9 +49,9 @@ namespace oscore
   }
   
   /** 
-   * Constructor
+   * Constructor.
    *
-   * @param Runnable* target
+   * @param target the object whose run method is invoked when this thread is started.
    */
   Thread::Thread(Runnable* target)
   {
@@ -59,10 +59,10 @@ namespace oscore
   }
 
   /** 
-   * Constructor
+   * Constructor.
    *
-   * @param Runnable* target
-   * @param char*     name   
+   * @param target the object whose run method is invoked when this thread is started.
+   * @param name name of this thread.
    */
   Thread::Thread(Runnable* target, const char* name)
   {
@@ -70,7 +70,7 @@ namespace oscore
   }  
   
   /** 
-   * Destructor
+   * Destructor.
    */
   Thread::~Thread()
   {
@@ -78,18 +78,14 @@ namespace oscore
   }
   
   /**
-   * Run
-   *
-   * @return void
+   * Default run method
    */  
   void Thread::run()
   {
   }
   
   /**
-   * Start thread
-   *
-   * @return void
+   * Causes this thread to begin execution.
    */  
   void Thread::start()
   {
@@ -114,9 +110,7 @@ namespace oscore
   }
   
   /**
-   * Waits for this thread to die
-   *
-   * @return void
+   * Waits for this thread to die.
    */  
   void Thread::join()
   {
@@ -124,11 +118,10 @@ namespace oscore
   }
   
   /**
-   * Causes the currently executing thread to sleep
+   * Causes the currently executing thread to sleep.
    *
-   * @param int64 millis The length of time to sleep in milliseconds   
-   * @param int32 nanos  Additional nanoseconds to sleep   
-   * @return void
+   * @param millis The length of time to sleep in milliseconds.
+   * @param nanos  Additional nanoseconds to sleep.
    */  
   void Thread::sleep(int64 millis, int32 nanos)
   {
@@ -141,9 +134,9 @@ namespace oscore
   }
   
   /**
-   * Block current thread on given resourse and yeild task
+   * Block current thread on given resourse and yeild task.
    *
-   * @return void
+   * @param block pointer to resource.
    */  
   void Thread::block(Resource* block)
   {
@@ -157,9 +150,9 @@ namespace oscore
   }  
 
   /**
-   * Returns the identifier of this Thread
+   * Returns the identifier of currently executing thread.
    *
-   * @return int32
+   * @return thread identifier.
    */  
   int32 Thread::getCurrentThreadId()
   {
@@ -169,39 +162,38 @@ namespace oscore
   }  
 
   /**
-   * Returns a reference to the currently executing thread object
+   * Returns a pointer to the currently executing thread.
    *
-   * @return Thread*
+   * @return pointer on thread.
    */
   Thread* Thread::currentThread()
   {
     return thread_.current;
   }
-  
-  /**
-   * Get this thread priority.
-   *
-   * @return int32
-   */  
-  int32 Thread::getPriority()
-  {
-    return priority_;
-  }
 
   /**
-   * Yield next thread
-   *
-   * @return void
+   * Yield to next thread.
    */  
   void Thread::yield()
   {
     interrupt_.res->jump();
   }
   
+  
+  /**
+   * Get this thread priority.
+   *
+   * @return priority value.
+   */  
+  int32 Thread::getPriority()
+  {
+    return priority_;
+  }  
+  
   /**
    * Set this thread priority.
    *
-   * @return int32
+   * @param priority number of priority in range [MIN_PRIORITY, MAX_PRIORITY].
    */  
   void Thread::setPriority(int32 priority)
   {
@@ -213,8 +205,6 @@ namespace oscore
   
   /**
    * Lock switching threads
-   *
-   * @return bool
    */    
   void Thread::disable()
   {
@@ -224,9 +214,7 @@ namespace oscore
   }
    
   /**
-   * Unlock switching threads
-   *
-   * @return bool
+   * Unlock switching threads.
    */   
   void Thread::enable()
   {
@@ -236,9 +224,9 @@ namespace oscore
   }
   
   /**
-   * Initialization
+   * Initialization.
    *
-   * @return int32 Error code or zero
+   * @return true if no errors.
    */
   bool Thread::init()
   {
@@ -292,7 +280,7 @@ namespace oscore
   /**
    * Deinitialization
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool Thread::deinit()
   {
@@ -309,9 +297,9 @@ namespace oscore
   }  
   
   /**
-   * Check initialization
+   * Check initialization.
    *
-   * @return bool
+   * @return true if initialize.
    */
   bool Thread::isInit()
   {
@@ -321,9 +309,7 @@ namespace oscore
   }
 
   /**
-   * Thread sheduler
-   *
-   * @return void
+   * Thread sheduler.
    */    
   void Thread::sheduler()
   {
@@ -365,9 +351,7 @@ namespace oscore
   }
   
   /**
-   * Start vector function
-   *
-   * @return void
+   * Main user class start vector.
    */  
   void Thread::mainVector()
   {
@@ -375,9 +359,7 @@ namespace oscore
   }
 
   /**
-   * Start vector function
-   *
-   * @return void
+   * Run method of Runnable interface start vector.
    */  
   void Thread::runVector()
   {
@@ -385,9 +367,7 @@ namespace oscore
   }
 
   /**
-   * Exit vector function
-   *
-   * @return void No return
+   * Exit vector function.
    */  
   void Thread::exitVector()
   {
@@ -412,9 +392,7 @@ namespace oscore
   }  
   
   /**
-   * Initiate thread execution
-   *
-   * @return void
+   * Initiate thread execution.
    */  
   void Thread::initiate()
   {
@@ -423,9 +401,7 @@ namespace oscore
   }
 
   /**
-   * Terminate thread execution
-   *
-   * @return void
+   * Terminate thread execution.
    */    
    void Thread::terminate()
    {
@@ -435,12 +411,12 @@ namespace oscore
    }
   
   /**
-   * Enable thread execution
+   * Enable thread execution.
    *
    * Function begin execution fist thread 
-   * or return false if error
+   * or return false if error.
    *
-   * @return bool 
+   * @return false if error.
    */  
   bool Thread::running()
   {
@@ -457,9 +433,7 @@ namespace oscore
   }
 
   /**
-   * Set interrupt content register
-   *
-   * @return void
+   * Set interrupt content register.
    */  
   void Thread::setRegister()
   {
@@ -468,8 +442,6 @@ namespace oscore
 
   /**
    * Set thread quant time
-   *
-   * @return void
    */  
   void Thread::setQuant()
   {
@@ -478,10 +450,10 @@ namespace oscore
   }
  
   /**
-   * Set status of thread
+   * Set status of thread.
    *
-   * @param Status status New status of object
-   * @return bool
+   * @param status new status of this thread.
+   * @return true if status is changed.
    */
   bool Thread::setStatus(Status status)
   {
@@ -563,9 +535,9 @@ namespace oscore
   }
 
   /**
-   * Returns current status of thread
+   * Returns current status of this thread.
    *
-   * @return Status enum
+   * @return status of this thread.
    */  
   Thread::Status Thread::getStatus()
   {
@@ -573,10 +545,10 @@ namespace oscore
   }
   
   /**
-   * Thread constructor
+   * Constructor of this class.
    *
-   * @param Runnable* target    
-   * @return void
+   * @param target the object whose run method is invoked when this thread is started.
+   * @param name name of this thread.
    */
   void Thread::construct(Runnable* target, const char* name)
   {
@@ -609,9 +581,7 @@ namespace oscore
   }
 
   /**
-   * Destructor
-   *
-   * @return void
+   * Destructor of this class.
    */  
   void Thread::destruct()
   {
@@ -622,9 +592,7 @@ namespace oscore
   } 
   
   /**
-   * Set object to default 
-   *
-   * @return void
+   * Reset object to default.
    */  
   void Thread::resetObjectData()
   {
@@ -641,9 +609,7 @@ namespace oscore
   }   
   
   /**
-   * Unlink thread from ring
-   *
-   * @return void
+   * Unlink thread from ring.
    */  
   void Thread::unlink()
   {

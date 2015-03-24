@@ -1,7 +1,7 @@
 /** 
- * Hardware Timer resource
+ * Hardware timer resource.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -28,12 +28,11 @@ namespace oscore
                                 Timer(Number);
       virtual                  ~Timer();
       uint32                    getCount();
-      void                      setCount(uint32);
-      void                      stopCount();
-      void                      allowCount();
       uint32                    getPeriod();
+      void                      setCount(uint32);
       void                      setPeriod(uint32 =0);
       void                      start();
+      void                      stopCount();
 
     private:
 

@@ -1,7 +1,7 @@
 /** 
- * Interrupt module
+ * Hardware interrupt resource.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -29,7 +29,7 @@ namespace oscore
   
   
   /**
-   * Constructor
+   * Constructor.
    */
   Interrupt::Interrupt()
   {
@@ -37,10 +37,10 @@ namespace oscore
   }  
   
   /**
-   * Constructor
+   * Constructor.
    *
-   * @param enum Source       source
-   * @param InterruptHandler* handler   
+   * @param source enum Interrupt::Source.
+   * @param handler pointer to user class which implements oscore::InterruptHandler interface.
    */
   Interrupt::Interrupt(Source source, InterruptHandler* handler)
   {
@@ -51,7 +51,7 @@ namespace oscore
   }
 
   /**
-   * Destructor
+   * Destructor.
    */
   Interrupt::~Interrupt()
   {
@@ -60,9 +60,7 @@ namespace oscore
   }
   
   /**
-   * Lock maskable interrupt
-   *
-   * @return void
+   * Lock maskable interrupt.
    */  
   void Interrupt::lock()
   {
@@ -71,8 +69,6 @@ namespace oscore
   
   /**
    * Unlock maskable interrupt
-   *
-   * @return void
    */  
   void Interrupt::unlock()
   {
@@ -80,9 +76,7 @@ namespace oscore
   }
   
   /**
-   * Set interrupt status
-   *
-   * @return void
+   * Set interrupt status.
    */  
   void Interrupt::set()
   {
@@ -90,9 +84,7 @@ namespace oscore
   }
   
   /**
-   * Clear interrupt status
-   *
-   * @return void
+   * Clear interrupt status.
    */  
   void Interrupt::clear()
   {
@@ -101,8 +93,6 @@ namespace oscore
   
   /**
    * Jump to interrupt HW vector
-   *
-   * @return void
    */  
   void Interrupt::jump()
   {
@@ -110,9 +100,9 @@ namespace oscore
   }  
   
   /**
-   * Init interrupt HW
+   * Initialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool Interrupt::init()
   {
@@ -147,9 +137,9 @@ namespace oscore
   }    
   
   /**
-   * Deinitialization
+   * Deinitialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool Interrupt::deinit()
   {
@@ -167,11 +157,11 @@ namespace oscore
   }
   
   /**
-   * Set interrupt source
+   * Set interrupt source.
    *
-   * @param enum Source       source
-   * @param InterruptHandler* handler
-   * @return int32 Error code or zero
+   * @param source enum Interrupt::Source.
+   * @param handler pointer to user class which implements oscore::InterruptHandler interface.
+   * @return error code or zero.
    */  
   int32 Interrupt::setSource(Source source, InterruptHandler* handler)
   {
@@ -202,9 +192,7 @@ namespace oscore
   }
   
   /**
-   * Remove this interrupt source
-   *
-   * @return void
+   * Remove this interrupt source.
    */  
   void Interrupt::removeSource()
   {
@@ -217,9 +205,9 @@ namespace oscore
   }
   
   /**
-   * Current object is have hw interrupt
+   * Current object is have HW interrupt.
    *
-   * @return bool
+   * @return true if object is have interrupt source.
    */
   bool Interrupt::isAlloc()
   {
@@ -227,9 +215,9 @@ namespace oscore
   }     
   
   /**
-   * Set MUX register
+   * Set MUX register.
    *
-   * @return bool
+   * @return true if no error.
    */  
   bool Interrupt::setMux(Source source, uint32 vi, Mux* mux)
   {
@@ -255,10 +243,9 @@ namespace oscore
   }
   
   /**
-   * Interrupt handle
+   * HW interrupt handle routing.
    *
-   * @param int32 vec Hw interrupt vector number
-   * @return void
+   * @param vec HW interrupt vector number
    */  
   void Interrupt::handle(int32 vec)
   {
@@ -266,9 +253,9 @@ namespace oscore
   }
   
   /**
-   * Set save context register pointer
+   * Set save context register pointer.
    *
-   * @return void
+   * @param reg pointer to oscore::Register struct.
    */  
   void Interrupt::setRegister(Register* reg)
   {

@@ -1,7 +1,7 @@
 /** 
- * Core of Operation System
+ * System class of core.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -21,9 +21,9 @@ namespace oscore
   System::HwResource System::res_ = {NULL};  
 
   /**
-   * Initialization and start system
+   * Current value of the running system in milliseconds.
    *
-   * @return uint64
+   * @return time in milliseconds.
    */  
   uint64 System::currentTimeMillis()
   {
@@ -31,9 +31,9 @@ namespace oscore
   }
 
   /**
-   * Current value of the running system
+   * Current value of the running system.
    *
-   * @return uint64
+   * @return time in nanoseconds.
    */  
   uint64 System::nanoTime()
   {
@@ -45,12 +45,11 @@ namespace oscore
   }
   
   /**
-   * Terminate running system
+   * Terminate running system.
    *
    * This method never returns normally.
    *
-   * @param int32 status   
-   * @return void
+   * @param status exit status.
    */  
   void System::exit(int32 status)
   {
@@ -58,9 +57,7 @@ namespace oscore
   }  
   
   /**
-   * Initialization and start system
-   *
-   * @return bool
+   * Initialization and start system.
    */
   void System::start()
   {
@@ -81,9 +78,9 @@ namespace oscore
   }
 
   /**
-   * Initialization
+   * Initialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool System::init()
   {
@@ -113,9 +110,9 @@ namespace oscore
   }
   
   /**
-   * Deinitialization
+   * Deinitialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool System::deinit()
   {
@@ -125,9 +122,9 @@ namespace oscore
   }  
   
   /**
-   * System sheduler
+   * System sheduler.
    *
-   * @return void
+   * Sheduler called by Tread class sheduler.
    */    
   void System::sheduler()
   {
@@ -135,9 +132,7 @@ namespace oscore
   }
   
   /**
-   * Updete system time
-   *
-   * @return void
+   * Updete system time.
    */    
   void System::updateTime()
   {

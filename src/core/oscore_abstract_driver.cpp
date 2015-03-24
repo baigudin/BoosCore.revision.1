@@ -1,7 +1,7 @@
 /** 
- * Abstract driver class
+ * This class provides a skeletal implementation of the Driver interface.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -11,24 +11,24 @@
 namespace oscore
 {
   /** 
-   * Constructor
+   * Constructor.
    */
   AbstractDriver::AbstractDriver()
   {
   }
 
   /**
-   * Destructor
+   * Destructor.
    */
   AbstractDriver::~AbstractDriver()
   {
   }
   
   /**
-   * Open stream
+   * Open stream.
    *
-   * @param int32 access
-   * @return int32 Error code or zero
+   * @param access access to stream.
+   * @return error code or zero.
    */
   int32 AbstractDriver::open(int32 access)
   {
@@ -36,9 +36,9 @@ namespace oscore
   }
   
   /**
-   * Close stream
+   * Close stream.
    *
-   * @return int32 Error code or zero
+   * @return error code or zero.
    */  
   int32 AbstractDriver::close()
   {
@@ -46,11 +46,11 @@ namespace oscore
   }
 
   /**
-   * Stream read from device
+   * Stream read from device.
    *
-   * @param void* buf 
-   * @param int32 size
-   * @return int32
+   * @param buf pointer to memory.
+   * @param size size in byte.
+   * @return count of reading bytes or -1 if error.
    */  
   int32 AbstractDriver::read(void* buf, int32 size)
   {
@@ -60,9 +60,9 @@ namespace oscore
   /**
    * Stream write to device
    *
-   * @param void* buf 
-   * @param int32 size    
-   * @return int32
+   * @param buf pointer to memory.
+   * @param size size in byte.
+   * @return count of writing bytes or -1 if error.
    */  
   int32 AbstractDriver::write(void* buf, int32 size)
   {
@@ -70,11 +70,11 @@ namespace oscore
   }
   
   /**
-   * Device control command
+   * Device control command.
    *
-   * @param int32 command
-   * @param void*  arg   
-   * @return int32 Error code or zero
+   * @param command control command for device.
+   * @param arg pointer to any data.
+   * @return error code or zero.
    */  
   int32 AbstractDriver::control(int32 command, const void* arg)
   {

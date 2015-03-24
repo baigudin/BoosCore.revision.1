@@ -1,7 +1,7 @@
 /**
- * Thread module
+ * Thread class.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -32,17 +32,17 @@ namespace oscore
                                 Thread(Runnable*, const char*);
       virtual                  ~Thread();
       virtual void              run();
-      void                      start();
-      void                      join();
       int32                     getPriority();
+      void                      join();
       void                      setPriority(int32);
-      static Thread*            currentThread();
-      static int32              getCurrentThreadId();
-      static void               sleep(int64, int32=0);
+      void                      start();
       static void               block(Resource*);
-      static void               yield();
+      static Thread*            currentThread();
       static void               disable();
       static void               enable();
+      static int32              getCurrentThreadId();
+      static void               sleep(int64, int32=0);
+      static void               yield();
 
     private:
 

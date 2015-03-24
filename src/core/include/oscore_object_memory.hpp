@@ -1,7 +1,7 @@
 /** 
- * Memory for system objects
+ * Memory for system objects.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -34,7 +34,11 @@ namespace oscore
       static const uint32       ATTR_USED = 0x00008000;
 
       /**
-       * Operator new
+       * Operator new.
+       *
+       * @param size unused.
+       * @param prt  address of memory.
+       * @return address of memory.
        */   
       void* operator new(uint32, void* ptr)
       {
@@ -42,10 +46,10 @@ namespace oscore
       }
 
       /** 
-       * Initialization
+       * Initialization.
        *
-       * @param uint32  size Size of page in byte
-       * @return ObjectMemory*
+       * @param size size of page in byte.
+       * @return pointer to ObjectMemory.
        */
       static ObjectMemory* init(ObjectPage* page)
       {
@@ -56,9 +60,7 @@ namespace oscore
       }
 
       /** 
-       * Dump allocated blocks
-       *
-       * @return void
+       * Dump allocated blocks.
        */
       static void dumpAllocated()
       {
@@ -83,15 +85,6 @@ namespace oscore
             std::cout << "Size: " << (const char*)str <<"; "; 
             sprintf(str, "0x%08X", mem->isize_);
             std::cout << "iSize: " << (const char*)str <<"; "; 
-            if(mem->attr_ & ATTR_USED)
-            {
-              obj = mem->data();
-              if(obj->memory_ == mem)
-              {
-                sprintf(str, "0x%08X", obj->getId());
-                std::cout << "OID: " << (const char*)str <<"; "; 
-              }
-            }
             std::cout << "\n";
             mem = mem->next_;
           }
@@ -103,10 +96,10 @@ namespace oscore
 
 
       /**
-       * Allocate object
+       * Allocate object.
        *
-       * @param uint32 size Size in byte
-       * @return Object* Allocated object   
+       * @param size size in byte.
+       * @return pointer to Object.
        */  
       static Object* create(uint32 size)
       {
@@ -124,11 +117,11 @@ namespace oscore
       }  
       
       /**
-       * Allocate object
+       * Allocate object.
        *
-       * @param uint32      size Size in byte
-       * @param ObjectPage* page Memory page address
-       * @return Object* Allocated object   
+       * @param size size in byte.
+       * @param page memory page address.
+       * @return pointer to allocated object.
        */  
       static Object* alloc(uint32 size, ObjectPage* page)
       {
@@ -175,10 +168,10 @@ namespace oscore
       }
 
       /**
-       * Free allocated memory
+       * Free allocated memory.
        *
-       * @param void* obj Address of allocated object
-       * @return bool
+       * @param obj address of allocated object.
+       * @return true if free complete.
        */  
       static bool free(Object* obj)
       {
@@ -240,10 +233,10 @@ namespace oscore
       }  
 
       /**
-       * Check available memory to free
+       * Check available memory to free.
        *
-       * @param void* obj Address of allocated object
-       * @return bool
+       * @param obj address of allocated object.
+       * @return true if may be deleted.
        */  
       static bool isDelete(Object* obj)
       {
@@ -256,9 +249,9 @@ namespace oscore
       }
 
       /**
-       * Check available page
+       * Check available memory.
        *
-       * @return bool
+       * @return true if memory is available.
        */  
       bool isMemory()
       {
@@ -266,9 +259,9 @@ namespace oscore
       }
       
       /**
-       * Get first free data address
+       * Get first free data address.
        *
-       * @return Object*
+       * @return pointer to Object.
        */
       Object* data()
       {
@@ -276,10 +269,10 @@ namespace oscore
       }            
 
       /**
-       * Initialization memory struct
+       * Initialization memory struct.
        *
-       * @param ObjectPage* page
-       * @return this
+       * @param page pointer to page.
+       * @return pointer to this object.
        */
       ObjectMemory* reset(ObjectPage* page)
       {

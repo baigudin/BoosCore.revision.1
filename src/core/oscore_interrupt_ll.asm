@@ -1,7 +1,7 @@
 ; ----------------------------------------------------------------------------
 ; Interrupt low level module
 ;
-; @author    Sergey Baigudin <baigudin@mail.ru>
+; @author    Sergey Baigudin, baigudin@mail.ru
 ; @copyright 2014-2015 Sergey Baigudin
 ; @license   http://baigudin.com/license/
 ; @link      http://baigudin.com
@@ -179,9 +179,9 @@ ret00?  addkpc          ret00?+4, b3, 4
         nop             4
 
 ; ----------------------------------------------------------------------------
-; Interrupt enable C++ function
+; Global interrupt enable (C++ function)
 ;
-; param  A4 If set in one - all interrupts enable, else no effect
+; param  A4 value witch return disable method. If in one - all interrupts enables.
 ; return void
 ; ----------------------------------------------------------------------------
 m_enable:
@@ -194,9 +194,9 @@ os_int_enable:
         nop             1
 
 ; ----------------------------------------------------------------------------
-; Interrupt disable C++ function
+; Global interrupt disable (C++ function)
 ;
-; return A4 Value of GIE bit before function call
+; return A4 value of GIE bit before method is call
 ; ----------------------------------------------------------------------------
 m_disable:
 os_int_disable:

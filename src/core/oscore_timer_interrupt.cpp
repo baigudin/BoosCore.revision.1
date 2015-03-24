@@ -1,7 +1,7 @@
 /** 
- * Timer interrupt module
+ * Hardware timer interrupt resource.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -13,7 +13,10 @@
 namespace oscore
 {
   /**
-   * Constructor
+   * Constructor.
+   *
+   * @param source enum TimerInterrupt::Source.
+   * @param handler pointer to user class which implements oscore::InterruptHandler interface.
    */
   TimerInterrupt::TimerInterrupt(Source source, InterruptHandler* handler) : Interrupt()
   {
@@ -51,7 +54,7 @@ namespace oscore
   }
 
   /**
-   * Destructor
+   * Destructor.
    */
   TimerInterrupt::~TimerInterrupt()
   {
@@ -59,9 +62,9 @@ namespace oscore
   }
   
   /**
-   * Get Timer class
+   * Get Timer class for this timer interrupt resource.
    *
-   * @return Timer*
+   * @return pointer to Timer class of this object.
    */
   Timer* TimerInterrupt::getTimer()
   {

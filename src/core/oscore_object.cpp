@@ -1,7 +1,7 @@
 /** 
- * Object of OS
+ * Root class of the system class hierarchy.
  * 
- * @author    Sergey Baigudin <baigudin@mail.ru>
+ * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
@@ -16,44 +16,27 @@
 
 namespace oscore
 {
-  int32 Object::idCount_ = 1;  
-
   /** 
-   * Constructor
+   * Constructor.
    */
   Object::Object()
   {
     memory_ = (ObjectMemory*)((uint32)this - sizeof(ObjectMemory));
     if((memory_->isMemory() && memory_->page_->isMemory()) == false) memory_ = NULL;
-    if(idCount_ == 0) setError(OSE_ID);
-    else
-    {
-      id_ = idCount_++;    
-      setError(OSE_OK);
-    }
+    setError(OSE_OK);
   } 
   
   /** 
-   * Destructor
+   * Destructor.
    */
   Object::~Object()
   {
   }
   
-  /** 
-   * Get object ID
-   *
-   * @return int32
-   */  
-  int32 Object::getId()
-  {
-    return id_;
-  }
-  
   /**
-   * Get error number
+   * Get error number.
    *
-   * @return int32 Error code or zero
+   * @return error code or zero.
    */  
   int32 Object::getError()
   {
@@ -61,9 +44,9 @@ namespace oscore
   }
   
   /**
-   * Set error number
+   * Set error number.
    *
-   * @return void
+   * @param error error number of enum Error.
    */  
   void Object::setError(int32 error)
   {
@@ -71,33 +54,33 @@ namespace oscore
   }  
 
   /**
-   * Get error string
+   * Get error string.
    *
-   * @param int32 error Error code or zero   
-   * @return const char*
+   * @param error error number.
+   * @return pointer to error string.
    */    
-   const char* Object::getErrorString(int32 error)
-   {
-     switch(error)
-     {
-       case OSE_OK:    return "No errors";
-       case OSE_ARG:   return "Argument error";
-       case OSE_CMD:   return "Command error";       
-       case OSE_MEM:   return "Memory error";
-       case OSE_HW:    return "Hardware error";
-       case OSE_ID:    return "Error object ID";       
-       case OSE_ALLOC: return "Alloced error";
-       case OSE_RES:   return "Resource error";
-       case OSE_BUSY:  return "Something is busy";
-       case OSE_INIT:  return "Initializetion error";
-       default: return NULL;
-     }
-   }
+  const char* Object::getErrorString(int32 error)
+  {
+    switch(error)
+    {
+      case OSE_OK:    return "No errors";
+      case OSE_ARG:   return "Argument error";
+      case OSE_CMD:   return "Command error";       
+      case OSE_MEM:   return "Memory error";
+      case OSE_HW:    return "Hardware error";
+      case OSE_ID:    return "Error object ID";       
+      case OSE_ALLOC: return "Alloced error";
+      case OSE_RES:   return "Resource error";
+      case OSE_BUSY:  return "Something is busy";
+      case OSE_INIT:  return "Initializetion error";
+      default: return NULL;
+    }
+  }
   
   /**
-   * Object alloced in heap
+   * Check this Object allocates.
    *
-   * @return bool
+   * @return true if this object alloceted in heap.
    */  
   bool Object::onHeap()
   {
@@ -105,9 +88,9 @@ namespace oscore
   }
   
   /**
-   * Initialization
+   * Initialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool Object::init()
   {
@@ -126,9 +109,9 @@ namespace oscore
   }
   
   /**
-   * Deinitialization
+   * Deinitialization.
    *
-   * @return bool
+   * @return true if no errors.
    */
   bool Object::deinit()
   {
@@ -137,10 +120,10 @@ namespace oscore
   }
 
   /**
-   * Allocate of memory
+   * Allocate new memory block in heap.
    *
-   * @param uint32 size Size in byte
-   * @return void* Allocated memory address or NULL, if error
+   * @param size size in byte.
+   * @return pointer to allocated memory address or NULL, if error.
    */   
   void* Object::memAlloc(uint32 size)
   {
@@ -148,10 +131,10 @@ namespace oscore
   }
 
   /**
-   * Free allocated memory
+   * Free allocated memory block.
    *
-   * @param void* ptr Address of allocated memory
-   * @return bool
+   * @param ptr pointer to allocated memory address.
+   * @return true if block is removed.
    */   
   bool Object::memFree(void* ptr)
   {
@@ -159,11 +142,11 @@ namespace oscore
   }
   
   /** 
-   * Added memory
+   * Added new memory page.
    *
-   * @param void*  addr Address of memory
-   * @param uint32 size Size of memory in sizeof
-   * @return void*
+   * @param addr address of memory page.
+   * @param size size of memory page in sizeof.
+   * @return real memory page address.
    */
   void* Object::memAdd(void* addr, uint32 size)
   {
@@ -187,10 +170,10 @@ namespace oscore
   }
   
   /** 
-   * Remove memory
+   * Remove memory page.
    *
-   * @param void* addr Address of memory
-   * @return bool
+   * @param real memory page address.
+   * @return true if page is removed.
    */  
   bool Object::memRemove(void* addr)
   {
@@ -198,10 +181,10 @@ namespace oscore
   }
   
   /**
-   * Operator new
+   * Operator new.
    *
-   * @param uint32 size Size in byte
-   * @return void* Allocated memory address or NULL, if error
+   * @param size size in byte.
+   * @return allocated memory address or NULL, if error.
    */
   void* Object::operator new(uint32 size)
   {
@@ -209,11 +192,11 @@ namespace oscore
   }
   
   /**
-   * Operator new
+   * Operator new.
    *
-   * @param uint32      Unused
-   * @param void*  prt Address of memory
-   * @return void* Address of memory
+   * @param size unused.
+   * @param prt  address of memory.
+   * @return address of memory.
    */
   void* Object::operator new(uint32, void* ptr)
   {
@@ -221,11 +204,11 @@ namespace oscore
   }
   
   /**
-   * Operator new[]
+   * Operator new[].
    *
-   * @param uint32     Unused
-   * @param void*  prt Address of memory
-   * @return void* Address of memory      
+   * @param size unused.
+   * @param prt  address of memory.
+   * @return address of memory.      
    */
   void* Object::operator new[](uint32, void* ptr)
   {
@@ -233,7 +216,10 @@ namespace oscore
   }
   
   /**
-   * Operator new[]
+   * Operator new[].
+   *
+   * @param size size in byte.
+   * @return NULL.
    */
   void* Object::operator new[](uint32 size)
   {
@@ -241,10 +227,10 @@ namespace oscore
   }
   
   /**
-   * Operator delete
+   * Operator delete.
    *
-   * @param void* addr Address of allocated memory
-   * @return void
+   * @param ptr address of allocated memory.
+   * @return void.
    */
   void Object::operator delete(void* ptr)
   {
@@ -252,21 +238,32 @@ namespace oscore
   }
 
   /**
-   * Operator delete[]
+   * Operator delete[].
+   *
+   * @param ptr address of allocated memory.
+   * @return void.   
    */  
   void Object::operator delete[](void* ptr)   
   {
   }
   
   /**
-   * Operator delete
+   * Operator delete.
+   *
+   * @param ptr unused.
+   * @param unused unused.   
+   * @return void.    
    */  
   void Object::operator delete(void*, void*)
   {
   }
   
   /**
-   * Operator delete[]
+   * Operator delete[].
+   *
+   * @param ptr unused.
+   * @param unused unused.   
+   * @return void.    
    */  
   void Object::operator delete[](void*, void*)
   {
