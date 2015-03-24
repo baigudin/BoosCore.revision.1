@@ -1,5 +1,5 @@
 /** 
- * OS types
+ * System types.
  * 
  * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin
@@ -10,7 +10,7 @@
 #define OSCORE_TYPES_H_
 
 #ifndef __cplusplus
-#  error "Please do not use C style sources with OS sources!"
+#  error "Please do not use C style sources with BOOS sources!"
 #endif
 
 #ifndef NULL

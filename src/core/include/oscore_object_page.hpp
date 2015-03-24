@@ -1,5 +1,5 @@
 /** 
- * Page of memory for system objects
+ * Page of memory for system objects.
  * 
  * @author    Sergey Baigudin, baigudin@mail.ru
  * @copyright 2014-2015 Sergey Baigudin

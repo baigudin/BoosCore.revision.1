@@ -10,9 +10,11 @@
 #define MAIN_H_
 
 #include "oscore_types.h"
+
 class Main
 {
   public:
+  
     static void                 main(void*);
 };
 #endif //MAIN_H_
