@@ -6,10 +6,12 @@
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
  */
-#include "oscore_abstract_driver.h"
+#include "osdrv_abstract_driver.h"
 
-namespace oscore
+namespace osdrv
 {
+  using namespace oscore;
+
   /** 
    * Constructor.
    */
@@ -32,7 +34,7 @@ namespace oscore
    */
   int32 AbstractDriver::open(int32 access)
   {
-    return OSE_HW;
+    return Object::OSE_HW;
   }
   
   /**
@@ -42,7 +44,7 @@ namespace oscore
    */  
   int32 AbstractDriver::close()
   {
-    return OSE_HW;  
+    return Object::OSE_HW;  
   }
 
   /**
@@ -78,6 +80,6 @@ namespace oscore
    */  
   int32 AbstractDriver::control(int32 command, const void* arg)
   {
-    return OSE_HW;
+    return Object::OSE_HW;
   }
 }

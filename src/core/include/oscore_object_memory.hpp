@@ -66,7 +66,6 @@ namespace oscore
       {
         #ifdef OS_MEMORY_DEBUG
         char str[64];
-        Object* obj;
         uint32 is = Interrupt::disable();
         std::cout << "-----------------\n";
         std::cout << "Allocated memory:\n";

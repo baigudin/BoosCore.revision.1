@@ -205,5 +205,4 @@ namespace oscore
     *REG_PRD2 = 0;
     *REG_CNT2 = 0;
   }
-   
 }

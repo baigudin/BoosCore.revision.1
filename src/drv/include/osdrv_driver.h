@@ -6,19 +6,19 @@
  * @license   http://baigudin.com/license/
  * @link      http://baigudin.com
  */
-#ifndef OSCORE_DRIVER_H_
-#define OSCORE_DRIVER_H_
+#ifndef OSDRV_DRIVER_H_
+#define OSDRV_DRIVER_H_
 
 #include "oscore_object.h"
 
-namespace oscore
+namespace osdrv
 {
   class Driver
   {
     public:
 
       enum Command {CMD_LAST = 32};
-      enum Error {OSE_LAST = Object::OSE_LAST};
+      enum Error {OSE_LAST = oscore::Object::OSE_LAST};
 
       virtual                  ~Driver(){}
       virtual int32             close() = 0;
@@ -28,4 +28,4 @@ namespace oscore
       virtual int32             write(void*, int32) = 0;
   };
 }
-#endif //OSCORE_DRIVER_H_
+#endif //OSDRV_DRIVER_H_
