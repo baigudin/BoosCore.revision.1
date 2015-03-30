@@ -172,7 +172,7 @@ namespace oscore
   /** 
    * Remove memory page.
    *
-   * @param real memory page address.
+   * @param addr real memory page address.
    * @return true if page is removed.
    */  
   bool Object::memRemove(void* addr)
